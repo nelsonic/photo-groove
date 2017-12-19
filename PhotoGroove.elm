@@ -2,31 +2,56 @@ module PhotoGroove exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 
 
-makeImageUrl index =
-    "http://elm-in-action.com/" ++ toString index ++ ".jpeg"
+urlPrefix =
+    "http://elm-in-action.com/"
 
 
 view model =
     div [ class "content" ]
         [ h1 [] [ text "Photo Groove" ]
         , div [ id "thumbnails" ]
-            (List.map (\index -> img [ src (makeImageUrl i) ] []) model)
-
-        -- , p []
-        --     [ text "hello"
-        --     , i [] [ text "world" ]
-        --     ]
+            (List.map (viewThumbnail model.selectedUrl) model.photos)
+        , img
+            [ class "large"
+            , src (urlPrefix ++ "large/" ++ model.selectedUrl)
+            ]
+            []
         ]
 
 
+viewThumbnail selectedUrl thumbnail =
+    img
+        [ src (urlPrefix ++ thumbnail.url)
+        , classList [ ( "selected", selectedUrl == thumbnail.url ) ]
+        , onClick { operation = "SELECT_PHOTO", data = thumbnail.url }
+        ]
+        []
+
+
+update msg model =
+    if msg.operation == "SELECT_PHOTO" then
+        { model | selectedUrl = msg.data }
+    else
+        model
+
+
 initialModel =
-    [ 1
-    , 2
-    , 3
-    ]
+    { photos =
+        [ { url = "1.jpeg" }
+        , { url = "2.jpeg" }
+        , { url = "3.jpeg" }
+        , { url = "4.jpeg" }
+        ]
+    , selectedUrl = "1.jpeg"
+    }
 
 
 main =
-    view initialModel
+    Html.beginnerProgram
+        { model = initialModel
+        , view = view
+        , update = update
+        }
