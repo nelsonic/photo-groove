@@ -150,6 +150,33 @@ applyFilters model =
             ( model, Cmd.none )
 
 
+
+-- See "Making Commands Testable" on p.175
+-- type Commands
+--     = FetchPhotos Decoder String
+--     | SetFilters FilterOptions
+--
+--
+-- toCmd : Commands -> Cmd Msg
+-- toCmd commands =
+--     case commands of
+--         FetchPhotos decoder url ->
+--             Http.get url decoder
+--                 |> Http.send LoadPhotos
+--
+--         SetFilters options ->
+--             setFilters options
+--
+--
+-- updateForProgram : Msg -> Model -> ( Model, Cmd Msg )
+-- updateForProgram msg model =
+--     let
+--         ( newModel, commands ) =
+--             update msg model
+--     in
+--         ( newModel, toCmd commands )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
