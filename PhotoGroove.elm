@@ -1,4 +1,4 @@
-module PhotoGroove exposing (..)
+port module PhotoGroove exposing (..)
 
 import Array exposing (Array)
 import Html exposing (..)
@@ -40,6 +40,7 @@ type Msg
     | SetHue Int
     | SetRipple Int
     | SetNoise Int
+    | SetStatus String
 
 
 view : Model -> Html Msg
@@ -49,6 +50,7 @@ view model =
         , button
             [ onClick SurpriseMe ]
             [ text "Surprise Me!" ]
+        , div [ class "status" ] [ text model.status ]
         , div [ class "filters" ]
             [ viewFilter "Hue" SetHue model.hue
             , viewFilter "Ripple" SetRipple model.ripple
@@ -92,7 +94,8 @@ viewLarge maybeUrl =
             text ""
 
         Just url ->
-            img [ class "large", src (urlPrefix ++ "large/" ++ url) ] []
+            -- img [ class "large", src (urlPrefix ++ "large/" ++ url) ] []
+            canvas [ id "main-canvas", class "large" ] []
 
 
 viewThumbnail : Maybe String -> Photo -> Html Msg
@@ -127,6 +130,26 @@ sizeToString size =
             "large"
 
 
+applyFilters : Model -> ( Model, Cmd Msg )
+applyFilters model =
+    case model.selectedUrl of
+        Just selectedUrl ->
+            let
+                filters =
+                    [ { name = "Hue", amount = toFloat model.hue / 11 }
+                    , { name = "Ripple", amount = toFloat model.ripple / 11 }
+                    , { name = "Noise", amount = toFloat model.noise / 11 }
+                    ]
+
+                url =
+                    urlPrefix ++ "large/" ++ selectedUrl
+            in
+                ( model, setFilters { url = url, filters = filters } )
+
+        Nothing ->
+            ( model, Cmd.none )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -139,10 +162,10 @@ update msg model =
                         |> Array.get index
                         |> Maybe.map .url
             in
-                ( { model | selectedUrl = newSelectedUrl }, Cmd.none )
+                applyFilters { model | selectedUrl = newSelectedUrl }
 
-        SelectByUrl url ->
-            ( { model | selectedUrl = Just url }, Cmd.none )
+        SelectByUrl selectedUrl ->
+            applyFilters { model | selectedUrl = Just selectedUrl }
 
         SurpriseMe ->
             let
@@ -155,12 +178,11 @@ update msg model =
             ( { model | chosenSize = size }, Cmd.none )
 
         LoadPhotos (Ok photos) ->
-            ( { model
-                | photos = photos
-                , selectedUrl = Maybe.map .url (List.head photos)
-              }
-            , Cmd.none
-            )
+            applyFilters
+                { model
+                    | photos = photos
+                    , selectedUrl = Maybe.map .url (List.head photos)
+                }
 
         LoadPhotos (Err _) ->
             ( { model
@@ -170,19 +192,28 @@ update msg model =
             )
 
         SetHue hue ->
-            ( { model | hue = hue }
-            , Cmd.none
-            )
+            applyFilters { model | hue = hue }
 
         SetRipple ripple ->
-            ( { model | ripple = ripple }
-            , Cmd.none
-            )
+            applyFilters { model | ripple = ripple }
 
         SetNoise noise ->
-            ( { model | noise = noise }
-            , Cmd.none
-            )
+            applyFilters { model | noise = noise }
+
+        SetStatus status ->
+            ( { model | status = status }, Cmd.none )
+
+
+port setFilters : FilterOptions -> Cmd msg
+
+
+port statusChanges : (String -> msg) -> Sub msg
+
+
+type alias FilterOptions =
+    { url : String
+    , filters : List { name : String, amount : Float }
+    }
 
 
 type alias Photo =
@@ -200,6 +231,7 @@ type alias Model =
     , hue : Int
     , ripple : Int
     , noise : Int
+    , status : String
     }
 
 
@@ -212,6 +244,7 @@ initialModel =
     , hue = 0
     , ripple = 0
     , noise = 0
+    , status = ""
     }
 
 
@@ -240,14 +273,23 @@ initialCmd =
         |> Http.send LoadPhotos
 
 
-main : Program Never Model Msg
+main : Program Float Model Msg
 main =
-    Html.program
-        { init = ( initialModel, initialCmd )
+    Html.programWithFlags
+        { init = init
         , view = viewOrError
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = \_ -> statusChanges SetStatus
         }
+
+
+init : Float -> ( Model, Cmd Msg )
+init flags =
+    let
+        status =
+            "Initializing Pasta v" ++ toString flags
+    in
+        ( { initialModel | status = status }, initialCmd )
 
 
 paperSlider : List (Attribute msg) -> List (Html msg) -> Html msg

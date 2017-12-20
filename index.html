@@ -8,9 +8,21 @@
     </head>
 <body>
   <div id="elm-area"></div>
+  <script src="http://elm-in-action.com/pasta.js"></script>
   <script src="elm.js"></script>
   <script>
-  Elm.PhotoGroove.embed(document.getElementById("elm-area"));
+  var app = Elm.PhotoGroove.embed(document.getElementById("elm-area"), Pasta.version);
+
+  app.ports.setFilters.subscribe(function(options) {
+    requestAnimationFrame(function() {
+      Pasta.apply(document.getElementById("main-canvas"), options);
+    });
+  });
+
+  Pasta.addStatusListener(function(status) {
+    // console.log("Got a new status to send to Elm: ", status);
+    app.ports.statusChanges.send(status);
+  });
   </script>
 </body>
 </html>
