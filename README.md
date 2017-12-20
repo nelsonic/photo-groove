@@ -13,3 +13,18 @@ that _are_ available are _superb_
 We have followed the book and built the "Photo Groove" sample application (_up to p. 195_)
 
 ![photo-groove-final](https://user-images.githubusercontent.com/194400/34470290-55ba7030-ef26-11e7-9cfa-9c900039444b.png)
+
+You can _run_ this code (_locally_) using:
+
+```sh
+elm-package install -y
+```
+
+> Note: if you don't have elm installed see:
+https://github.com/dwyl/learn-elm#install-the-elm-platform-globally-on-your-computer
+
+followed by:
+```
+open index.html
+```
+this will open the photo groove "app" in your web browser.
