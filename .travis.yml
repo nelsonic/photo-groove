@@ -43,5 +43,5 @@ before_script: # print some useful debug info
   - npm --version  # print npm version in Travis Log for debugging.
 
 script:
-  - elm-format --validate PhotoGroove.elm
-  - elm-test
+  - elm-format --validate PhotoGroove.elm # lint / format-check main file
+  - elm-test --verbose                    # run the tests!
