@@ -29,11 +29,12 @@ before_install:
       cd ..;
     fi
 
-install: # first 3 lines are "magic" courtesy of @rtfeldman https://git.io/vbj0j
+install:
+  - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp # specific version
+  # the next 3 lines are courtesy of @rtfeldman https://git.io/vbj0j
   - mv $(npm config get prefix)/bin/elm-make $(npm config get prefix)/bin/elm-make-old
   - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > $(npm config get prefix)/bin/elm-make
   - chmod +x $(npm config get prefix)/bin/elm-make
-  - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp # specific version
   - elm package install --yes # install main project dependencies
   - cd tests                  # change into /test directory to install more deps
   - elm package install --yes # install test dependencies
