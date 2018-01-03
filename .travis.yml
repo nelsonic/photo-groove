@@ -1,7 +1,7 @@
 sudo: false # don't need root access on Travis-CI (builds faster without sudo!)
 
 language: node_js # elm is installed from npm (see install below)
-node_js: node # use "latest" version of Node.js
+node_js: node     # use "latest" version of Node.js
 
 os: # test on *both* Linux and OSX to ensure compatibility
   - linux
@@ -38,7 +38,6 @@ install: # install elm and elm-test at *specific* versions
 
 before_script: # print some useful debug info
   - uname -a # print the *exact* operating system/kernel version
-  - cat /proc/cpuinfo # debug processesor info
   - node --version # print Node.js version in Travis Log for debugging
   - npm --version  # print npm version in Travis Log for debugging.
 
