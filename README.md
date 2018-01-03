@@ -23,10 +23,21 @@ elm-package install -y
 > Note: if you don't have elm installed see:
 https://github.com/dwyl/learn-elm#install-the-elm-platform-globally-on-your-computer
 
+then _compile_ the project:
+```sh
+elm-make PhotoGroove.elm --output elm.js --warn
+```
+
 followed by:
 ```
 open index.html
 ```
 this will open the photo groove "app" in your web browser.
+
+
+to run the tests, run the following command:
+```
+elm-test --verbose
+```
 
 [![HitCount](http://hits.dwyl.io/nelsonic/photo-groove.svg)](http://hits.dwyl.io/nelsonic/photo-groove)
