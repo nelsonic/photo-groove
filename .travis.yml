@@ -4,8 +4,8 @@ language: node_js # elm is installed from npm (see install below)
 node_js: node     # use "latest" version of Node.js
 
 os: # test on *both* Linux and OSX to ensure compatibility
-  - linux
-  - osx # if your project does not *need* OSX compatibility, remove this line.
+  - linux # defaults to Ubuntu Linux
+  # - osx # if your project does not *need* OSX compatibility, remove this line.
 
 env:
   - ELM_VERSION=0.18.0 ELM_TEST=0.18.12
@@ -17,7 +17,7 @@ cache:
     - tests/elm-stuff/build-artifacts # elm-test init creates a "tests/" dir
     - tests/elm-stuff/packages
     - sysconfcpus
-    - node_modules # NPM packages
+    - $HOME/.npm # https://stackoverflow.com/a/42523517/1148249
 
 before_install:
   - uname -a       # print the *exact* operating system/kernel version
