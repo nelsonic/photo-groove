@@ -28,8 +28,12 @@ before_install:
       make && make install;
       cd ..;
     fi
+
 install:
-  - node --version # print Node.js version in Travis Log for debugging
-  - npm --version  # print npm version in Travis Log for debugging.
   - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp
   - elm package install --yes
+
+script:
+  - node --version # print Node.js version in Travis Log for debugging
+  - npm --version  # print npm version in Travis Log for debugging.
+  - elm-test
