@@ -20,6 +20,9 @@ cache:
     - node_modules # NPM packages
 
 before_install:
+  - uname -a       # print the *exact* operating system/kernel version
+  - node --version # print Node.js version in Travis build log
+  - npm --version  # print npm version in Travis build log
   - if [ ${TRAVIS_OS_NAME} == "osx" ];
     then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
     fi
@@ -40,15 +43,13 @@ install: # install specific versions of elm & elm-test
   - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > $(npm config get prefix)/bin/elm-make
   - chmod +x $(npm config get prefix)/bin/elm-make
   - elm package install --yes # install main project dependencies
-  - cd tests                  # change into /test directory to install more deps
-  - elm package install --yes # install test dependencies
-  - cd ..                     # change back into root project directory
+  # - cd tests                  # change into /test directory to install more deps
+  # - elm package install --yes # install test dependencies
+  # - cd ..                     # change back into root project directory
   - pwd
 
-before_script:     # print some useful debug info
-  - uname -a       # print the *exact* operating system/kernel version
-  - node --version # print Node.js version in Travis build log
-  - npm --version  # print npm version in Travis build log
+# before_script:     # print some useful debug info
+
 
 script:
   # - elm-format --validate PhotoGroove.elm # lint / format-check main file
