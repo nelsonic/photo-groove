@@ -11,8 +11,8 @@ cache:
   directories: # so subsequent builds run faster
     - elm-stuff/build-artifacts
     - elm-stuff/packages
-    - test/elm-stuff/build-artifacts
-    - test/elm-stuff/packages
+    - tests/elm-stuff/build-artifacts # test/ >> tests/ ...!
+    - tests/elm-stuff/packages
     - sysconfcpus
 
 before_install:
