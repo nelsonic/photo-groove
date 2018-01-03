@@ -7,6 +7,9 @@ os: # test on *both* Linux and OSX to ensure compatibility
   - linux
   - osx # if your project does not *need* OSX compatibility, remove this line.
 
+env:
+  - ELM_VERSION=0.18.0
+
 cache:
   directories: # so subsequent builds run faster
     - elm-stuff/build-artifacts
@@ -14,6 +17,7 @@ cache:
     - tests/elm-stuff/build-artifacts # elm-test init creates a "tests/" dir
     - tests/elm-stuff/packages
     - sysconfcpus
+    - node_modules # NPM packages
 
 before_install:
   - if [ ${TRAVIS_OS_NAME} == "osx" ];
@@ -29,8 +33,8 @@ before_install:
       cd ..;
     fi
 
-install:
-  - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp # specific version
+install: # install specific versions of elm & elm-test
+  - npm install -g elm@$ELM_VERSION elm-test@0.18.12 elm-format@exp
   # the next 3 lines are courtesy of @rtfeldman https://git.io/vbj0j
   - mv $(npm config get prefix)/bin/elm-make $(npm config get prefix)/bin/elm-make-old
   - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > $(npm config get prefix)/bin/elm-make
@@ -39,6 +43,7 @@ install:
   - cd tests                  # change into /test directory to install more deps
   - elm package install --yes # install test dependencies
   - cd ..                     # change back into root project directory
+  - cwd
 
 before_script:     # print some useful debug info
   - uname -a       # print the *exact* operating system/kernel version

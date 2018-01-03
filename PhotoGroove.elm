@@ -2,11 +2,11 @@ port module PhotoGroove exposing (..)
 
 import Array exposing (Array)
 import Html exposing (..)
-import Html.Attributes as Attr exposing (id, class, classList, src, name, max, type_, title)
-import Html.Events exposing (onClick, on)
+import Html.Attributes as Attr exposing (class, classList, id, max, name, src, title, type_)
+import Html.Events exposing (on, onClick)
 import Http
-import Json.Decode exposing (string, int, list, Decoder, at)
-import Json.Decode.Pipeline exposing (decode, required, optional)
+import Json.Decode exposing (Decoder, at, int, list, string)
+import Json.Decode.Pipeline exposing (decode, optional, required)
 import Random
 
 
@@ -144,7 +144,7 @@ applyFilters model =
                 url =
                     urlPrefix ++ "large/" ++ selectedUrl
             in
-                ( model, setFilters { url = url, filters = filters } )
+            ( model, setFilters { url = url, filters = filters } )
 
         Nothing ->
             ( model, Cmd.none )
@@ -189,7 +189,7 @@ update msg model =
                         |> Array.get index
                         |> Maybe.map .url
             in
-                applyFilters { model | selectedUrl = newSelectedUrl }
+            applyFilters { model | selectedUrl = newSelectedUrl }
 
         SelectByUrl selectedUrl ->
             applyFilters { model | selectedUrl = Just selectedUrl }
@@ -199,7 +199,7 @@ update msg model =
                 randomPhotoPicker =
                     Random.int 0 (List.length model.photos - 1)
             in
-                ( model, Random.generate SelectByIndex randomPhotoPicker )
+            ( model, Random.generate SelectByIndex randomPhotoPicker )
 
         SetSize size ->
             ( { model | chosenSize = size }, Cmd.none )
@@ -316,7 +316,7 @@ init flags =
         status =
             "Initializing Pasta v" ++ toString flags
     in
-        ( { initialModel | status = status }, initialCmd )
+    ( { initialModel | status = status }, initialCmd )
 
 
 paperSlider : List (Attribute msg) -> List (Html msg) -> Html msg
