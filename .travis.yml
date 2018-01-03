@@ -50,6 +50,6 @@ install: # install specific versions of elm & elm-test
 
 
 script:
-  # - elm-format --validate PhotoGroove.elm # lint / format-check main file
+  - elm-format --validate PhotoGroove.elm # lint / format-check main file
   # - elm-make PhotoGroove.elm --output elm.js --warn # attempt elm-make
   - elm-test --verbose                    # run the tests!
