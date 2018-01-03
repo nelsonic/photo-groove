@@ -5,13 +5,13 @@ node_js: node     # use "latest" version of Node.js
 
 os: # test on *both* Linux and OSX to ensure compatibility
   - linux
-  - osx # if your project does not *need* OSX compatibility, comment this line.
+  - osx # if your project does not *need* OSX compatibility, remove this line.
 
 cache:
   directories: # so subsequent builds run faster
     - elm-stuff/build-artifacts
     - elm-stuff/packages
-    - tests/elm-stuff/build-artifacts # test/ >> tests/ ...!
+    - tests/elm-stuff/build-artifacts # elm-test init creates a "tests/" dir
     - tests/elm-stuff/packages
     - sysconfcpus
 
@@ -29,17 +29,20 @@ before_install:
       cd ..;
     fi
 
-install: # install elm and elm-test at *specific* versions
-  - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp
+install: # first 3 lines are "magic" courtesy of @rtfeldman https://git.io/vbj0j
+  - mv $(npm config get prefix)/bin/elm-make $(npm config get prefix)/bin/elm-make-old
+  - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > $(npm config get prefix)/bin/elm-make
+  - chmod +x $(npm config get prefix)/bin/elm-make
+  - npm install -g elm@0.18.0 elm-test@0.18.12 elm-format@exp # specific version
   - elm package install --yes # install main project dependencies
-  - cd test                   # change into /test directory to install more deps
+  - cd tests                  # change into /test directory to install more deps
   - elm package install --yes # install test dependencies
   - cd ..                     # change back into root project directory
 
-before_script: # print some useful debug info
-  - uname -a # print the *exact* operating system/kernel version
-  - node --version # print Node.js version in Travis Log for debugging
-  - npm --version  # print npm version in Travis Log for debugging.
+before_script:     # print some useful debug info
+  - uname -a       # print the *exact* operating system/kernel version
+  - node --version # print Node.js version in Travis build log
+  - npm --version  # print npm version in Travis build log
 
 script:
   - elm-format --validate PhotoGroove.elm # lint / format-check main file
