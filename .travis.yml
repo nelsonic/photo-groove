@@ -43,7 +43,7 @@ install: # install specific versions of elm & elm-test
   - cd tests                  # change into /test directory to install more deps
   - elm package install --yes # install test dependencies
   - cd ..                     # change back into root project directory
-  - cwd
+  - pwd
 
 before_script:     # print some useful debug info
   - uname -a       # print the *exact* operating system/kernel version
