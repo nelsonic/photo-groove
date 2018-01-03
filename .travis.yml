@@ -8,8 +8,9 @@ os: # test on *both* Linux and OSX to ensure compatibility
   - osx # if your project does not *need* OSX compatibility, remove this line.
 
 env:
-  - ELM_VERSION=0.18.0
-  - ELM_TEST_VERSION=4.2.0
+  global:
+    - ELM_VERSION=0.18.0
+    - ELM_TEST_VERSION=4.2.0
 
 cache:
   directories: # so subsequent builds run faster
