@@ -1,4 +1,4 @@
-# Photo Groove
+# Photo Groove [![Build Status](https://travis-ci.org/nelsonic/photo-groove.svg?branch=master)](https://travis-ci.org/nelsonic/photo-groove)
 
 Sample application built following @rtfeldman's Elm in Action Book:
 https://www.manning.com/books/elm-in-action
