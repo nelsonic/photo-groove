@@ -5,7 +5,7 @@ node_js: node     # use "latest" version of Node.js
 
 os: # test on *both* Linux and OSX to ensure compatibility
   - linux # defaults to Ubuntu Linux
-  # - osx # if your project does not *need* OSX compatibility, remove this line.
+  - osx # if your project does not *need* OSX compatibility, remove this line.
 
 env:
   - ELM_VERSION=0.18.0 ELM_TEST=0.18.12
@@ -21,10 +21,10 @@ cache:
 
 before_install:
   - uname -a       # print the *exact* operating system/kernel version
-  # - if [ ${TRAVIS_OS_NAME} == "osx" ];
-  #   then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
-  #   fi
-  - | # build time improvement - 10 mins >> 5 sec! see https://git.io/vQcqz
+  - if [ ${TRAVIS_OS_NAME} == "osx" ];
+    then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
+    fi
+  - | # build time improvement see: https://git.io/vQcqz
     if [ ! -d sysconfcpus/bin ];
     then
       git clone https://github.com/obmarg/libsysconfcpus.git;
