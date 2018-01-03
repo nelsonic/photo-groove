@@ -52,5 +52,5 @@ before_script:     # print some useful debug info
 
 script:
   # - elm-format --validate PhotoGroove.elm # lint / format-check main file
-  - elm-make PhotoGroove.elm --output elm.js --warn
+  # - elm-make PhotoGroove.elm --output elm.js --warn # attempt elm-make
   - elm-test --verbose                    # run the tests!
