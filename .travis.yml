@@ -9,6 +9,7 @@ os: # test on *both* Linux and OSX to ensure compatibility
 
 env:
   - ELM_VERSION=0.18.0
+  - ELM_TEST_VERSION=4.2.0
 
 cache:
   directories: # so subsequent builds run faster
@@ -21,8 +22,6 @@ cache:
 
 before_install:
   - uname -a       # print the *exact* operating system/kernel version
-  - node --version # print Node.js version in Travis build log
-  - npm --version  # print npm version in Travis build log
   - if [ ${TRAVIS_OS_NAME} == "osx" ];
     then brew update; brew install nvm; mkdir ~/.nvm; export NVM_DIR=~/.nvm; source $(brew --prefix nvm)/nvm.sh;
     fi
@@ -37,12 +36,12 @@ before_install:
     fi
 
 install: # install specific versions of elm & elm-test
-  - npm install -g elm@$ELM_VERSION elm-test@0.18.12 elm-format@exp
+  - npm install -g elm@$ELM_VERSION elm-test@ELM_TEST_VERSION elm-format@exp
   # the next 3 lines are courtesy of @rtfeldman https://git.io/vbj0j
   - mv $(npm config get prefix)/bin/elm-make $(npm config get prefix)/bin/elm-make-old
   - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > $(npm config get prefix)/bin/elm-make
   - chmod +x $(npm config get prefix)/bin/elm-make
-  - elm package install --yes # install main project dependencies
+  - travis_retry elm package install --yes # install main project dependencies
   # - cd tests                  # change into /test directory to install more deps
   # - elm package install --yes # install test dependencies
   # - cd ..                     # change back into root project directory
