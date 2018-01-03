@@ -28,3 +28,5 @@ followed by:
 open index.html
 ```
 this will open the photo groove "app" in your web browser.
+
+[![HitCount](http://hits.dwyl.io/nelsonic/photo-groove.svg)](http://hits.dwyl.io/nelsonic/photo-groove)
