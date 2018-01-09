@@ -14,6 +14,8 @@ We have followed the book and built the "Photo Groove" sample application (_up t
 
 ![photo-groove-final](https://user-images.githubusercontent.com/194400/34470290-55ba7030-ef26-11e7-9cfa-9c900039444b.png)
 
+## Run _Locally_ ?
+
 You can _run_ this code (_locally_) using:
 
 ```sh
@@ -23,19 +25,17 @@ elm-package install -y
 > Note: if you don't have elm installed see:
 https://github.com/dwyl/learn-elm#install-the-elm-platform-globally-on-your-computer
 
-then _compile_ the project:
+Then _compile_ the project with the following command:
 ```sh
-elm-make PhotoGroove.elm --output elm.js --warn
+elm-make PhotoGroove.elm --output elm.js --warn --debug --open
 ```
 
-followed by:
-```
-open index.html
-```
-this will open the photo groove "app" in your web browser.
+This will open the photo groove "app" in your web browser.
 
 
-to run the tests, run the following command:
+## Tests?
+
+To run the tests, run the following command:
 ```
 elm-test --verbose
 ```
